@@ -12,22 +12,31 @@ Package [on npm](https://www.npmjs.com/package/npm-funcs)
 
 ## API
 
-* [dependencies](#dependenciesname-latest)
+* [dependencies](#dependenciesname)
 * [dependents](#dependentsname)
-* [downloads](#downloadsname-latest)
+* [downloads](#downloadsname)
 * [packages](#packagesname)
-* [versions](#versionsname-latest)
+* [version](#versionname)
+* [versions](#versionsname)
 
-#### dependencies(name, [latest])
+#### dependencies(name)
 
-Get the depencies of a npm package
+Get some infos about the dependencies of a npm package
 
 | Argument | Action |
 | :------ | :------- |
 | **name** | the package `name` |
-| **latest** | optional `latest`, default to `false`. If `true`, return only infos for latest version |
 
 Return a Promise. The resolve function receive a JSON as described below
+
+For each package in the dependencies section, return some properties
+
+| Property | Action |
+| :------ | :------- |
+| **version** | the current `version` of the package |
+| **range** | the dependency `range` declared in the `package.json` file |
+| **outdated** | indicates if the dependency `range` does not satisfies the current `version` – [semver satisfies](https://github.com/npm/node-semver) |
+
 
 ```js
 const dependencies = require('npm-funcs/dependencies')
@@ -35,19 +44,12 @@ const dependencies = require('npm-funcs/dependencies')
 /*
 {
   name: 'object-funcs',
-  versions: {
-    '0.0.0': {},
-    '0.1.0': { 'is-funcs': '^0.2.1' },
-    '0.1.1': { 'is-funcs': '^0.3.1' },
-    '0.2.0': { 'is-funcs': '^0.4.1' },
-    '0.2.1': { 'is-funcs': '^0.4.1' },
-    '0.3.0': { 'is-funcs': '^0.5.0' },
-    '0.4.0': { 'is-funcs': '^0.5.0' }
-  },
-  latest: {
-    version: '0.4.0',
-    dependencies: {
-      'is-funcs': '^0.5.0'
+  version: '0.4.0',
+  dependencies: {
+    'is-funcs': {
+      version: '0.5.1',
+      range: '^0.5.0',
+      outdated: false
     }
   }
 }
@@ -58,29 +60,11 @@ dependencies('object-funcs')
 })
 ```
 
-With option `latest` to `true`
-
-```js
-const dependencies = require('npm-funcs/dependencies')
-
-/*
-{
-  name: 'object-funcs',
-  version: '0.4.0',
-  dependencies: {
-    'is-funcs': '^0.5.0'
-  }
-}
-*/
-dependencies('object-funcs', true)
-.then(function(data) {
-  console.log(data)
-})
-```
+---
 
 #### dependents(name)
 
-Get some relation infos on all packages that dependend of a specific npm package
+Get some relational infos on all packages that dependend of a specific npm package
 
 | Argument | Action |
 | :------ | :------- |
@@ -93,8 +77,8 @@ For each dependent package, return some properties
 | Property | Action |
 | :------ | :------- |
 | **version** | the current `version` of the dependent package |
-| **dependency** | the `dependency` range declared in dependent package `package.json` file |
-| **outdated** | indicates if the `dependency` range satisfies the current version – semver relation |
+| **range** | the dependency `range` declared in the dependent package `package.json` file |
+| **outdated** | indicates if the dependency `range` does not satisfies the current `version` – [semver satisfies](https://github.com/npm/node-semver) |
 
 ```js
 const dependents = require('npm-funcs/dependents')
@@ -103,15 +87,15 @@ const dependents = require('npm-funcs/dependents')
 {
   name: 'is-funcs',
   version: '0.5.1',
-  packages: {
+  dependents: {
     'dom-funcs': {
       version: '0.1.0',
-      dependency: '^0.5.1',
+      range: '^0.5.1',
       outdated: false
     },
     'fold-notifier': {
       version: '0.1.0',
-      dependency: '^0.3.2',
+      range: '^0.3.2',
       outdated: true
     },
     '//': '// 4 more objects...'
@@ -125,14 +109,15 @@ dependents('is-funcs')
 })
 ```
 
-#### downloads(name, [latest])
+---
 
-Get the downloads count of a npm package
+#### downloads(name)
+
+Get the downloads statistics of a npm package
 
 | Argument | Action |
 | :------ | :------- |
 | **name** | the package `name` |
-| **latest** | optional `latest`, default to `false`. If `true`, return only infos for latest download day |
 
 Return a Promise. The resolve function receive a JSON as described below
 
@@ -147,10 +132,6 @@ const downloads = require('npm-funcs/downloads')
     '2016-07-09': 15,
     '//': '// more lines...'
   },
-  latest: {
-    date: '2016-07-22',
-    downloads: 12
-  },
   total: 864
 }
 */
@@ -160,24 +141,7 @@ downloads('is-funcs')
 })
 ```
 
-With option `latest` to `true`
-
-```js
-const downloads = require('npm-funcs/downloads')
-
-/*
-{
-  name: 'is-funcs',
-  date: '2016-07-22',
-  downloads: 12,
-  total: 864
-}
-*/
-downloads('is-funcs', true)
-.then(function(data) {
-  console.log(data)
-})
-```
+---
 
 #### packages(name)
 
@@ -209,14 +173,15 @@ packages('jeromedecoster')
 })
 ```
 
-#### versions(name, [latest])
+---
+
+#### versions(name)
 
 Get the versions of a npm package
 
 | Argument | Action |
 | :------ | :------- |
 | **name** | the package `name` |
-| **latest** | optional `latest`, default to `false`. If `true`, return only infos for latest version |
 
 Return a Promise. The resolve function receive a JSON as described below
 
@@ -239,10 +204,6 @@ const versions = require('npm-funcs/versions')
     '0.5.0': '2016-07-08',
     '0.5.1': '2016-07-13'
   },
-  latest: {
-    version: '0.5.1',
-    date: '2016-07-13'
-  },
   count: 11
 }
 */
@@ -252,10 +213,14 @@ versions('is-funcs')
 })
 ```
 
-With option `latest` to `true`
+---
+
+#### version(name)
+
+Get the latest version of a npm package
 
 ```js
-const versions = require('npm-funcs/versions')
+const version = require('npm-funcs/version')
 
 /*
 {
@@ -265,7 +230,7 @@ const versions = require('npm-funcs/versions')
   count: 11
 }
 */
-versions('is-funcs', true)
+version('is-funcs')
 .then(function(data) {
   console.log(data)
 })

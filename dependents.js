@@ -1,11 +1,11 @@
 const dependents = require('./request').dependents
 const dependencies = require('./dependencies')
 const isOutdated = require('./is-outdated')
-const versions = require('./versions')
+const version = require('./version')
 
 module.exports = function(name) {
   return new Promise(function(resolve, reject) {
-    Promise.all([versions(name, true), dependents(name)])
+    Promise.all([version(name), dependents(name)])
     .then(function(arr) {
       return {
         name:    name,
@@ -30,17 +30,17 @@ function collect(data) {
         return data.name in e.dependencies
       })
       var obj = {
-        name:     data.name,
-        version:   data.version,
-        packages: {}
+        name:       data.name,
+        version:    data.version,
+        dependents: {}
       }
-      var dep
+      var range
       arr.forEach(function(e) {
-        dep = e.dependencies[data.name]
-        obj.packages[e.name] = {
-          version:    e.version,
-          dependency: dep,
-          outdated:   isOutdated(data.version, dep)
+        range = e.dependencies[data.name].range
+        obj.dependents[e.name] = {
+          version:  e.version,
+          range:    range,
+          outdated: isOutdated(data.version, range)
         }
       })
       obj.count = data.rows.length

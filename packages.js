@@ -6,7 +6,8 @@ module.exports = function(name) {
     packages(name)
     .then(function(data) {
       if (data.rows == null || data.rows.length == 0) {
-        reject(new Error('Invalid author name'))
+        // throw instead reject when chaining
+        throw new Error('Invalid author name')
       }
       return {
         name: name,

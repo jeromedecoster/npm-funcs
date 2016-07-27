@@ -4,15 +4,21 @@ const test = require('tape')
 test('outdated should be false', { timeout:20000 }, function (t) {
 
   var arr = ['*', '< 1', '> 0.2', '> 0.2 < 1', '^0.5']
-  t.plan(arr.length)
+  t.plan(arr.length * 4)
 
   arr.forEach(function(e) {
     fn('is-funcs', e)
     .then(function(data) {
-      t.deepEqual(data, false)
+      // console.log(data)
+      t.deepEqual(data.name,           'is-funcs')
+      t.deepEqual(typeof data.version, 'string')
+      t.deepEqual(typeof data.range,   'string')
+      t.deepEqual(data.outdated,       false)
     })
     .catch(function(err) {
-      t.deepEqual(err.code, 'ENOTFOUND', 'error catch ENOTFOUND')
+      for (var i = 0; i < 3; i++) {
+        t.deepEqual(err.code, 'ENOTFOUND', 'error catch ENOTFOUND')
+      }
     })
   })
 })
@@ -20,15 +26,20 @@ test('outdated should be false', { timeout:20000 }, function (t) {
 test('outdated should be true', { timeout:20000 }, function (t) {
 
   var arr = ['< 0.1', '> 2', '^0.1']
-  t.plan(arr.length)
+  t.plan(arr.length * 4)
 
   arr.forEach(function(e) {
     fn('is-funcs', e)
     .then(function(data) {
-      t.deepEqual(data, true)
+      t.deepEqual(data.name,           'is-funcs')
+      t.deepEqual(typeof data.version, 'string')
+      t.deepEqual(typeof data.range,   'string')
+      t.deepEqual(data.outdated,       true)
     })
     .catch(function(err) {
-      t.deepEqual(err.code, 'ENOTFOUND', 'error catch ENOTFOUND')
+      for (var i = 0; i < 3; i++) {
+        t.deepEqual(err.code, 'ENOTFOUND', 'error catch ENOTFOUND')
+      }
     })
   })
 })

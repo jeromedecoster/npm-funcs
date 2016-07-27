@@ -1,9 +1,12 @@
 const https = require('https')
 
-module.exports.registry = function(name) {
+module.exports.registry = function(name, latest) {
   var opts = {
     hostname: 'registry.npmjs.org',
     path:     '/' + name
+  }
+  if (latest === true) {
+    opts.path += '/latest'
   }
   return request(opts)
 }
@@ -47,7 +50,11 @@ function request(opts) {
     var req = https.request(opts, function(res) {
       res.on('data', function(d) { data += d })
       res.on('end',  function(d) {
-        resolve(JSON.parse(data))
+        try {
+          resolve(JSON.parse(data))
+        } catch(e) {
+          reject(new Error('URL request error'))
+        }
       })
     })
     req.end()

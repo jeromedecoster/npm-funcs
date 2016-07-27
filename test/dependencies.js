@@ -1,42 +1,29 @@
 const fn = require('../dependencies')
 const test = require('tape')
 
-test('dependencies', { timeout:10000 }, function (t) {
+test('dependencies', { timeout:20000 }, function (t) {
 
   fn('object-funcs')
   .then(function(data) {
     // console.log(data)
-    t.deepEqual(data.name,                                   'object-funcs')
-    t.deepEqual(typeof data.latest.version,                  'string')
-    t.deepEqual(typeof data.latest.dependencies['is-funcs'], 'string')
-    t.deepEqual(data.versions['0.0.0'], {})
-    t.deepEqual(Object.keys(data.versions).length > 1, true)
+    t.deepEqual(data.name,           'object-funcs')
+    t.deepEqual(typeof data.version, 'string')
+    var keys = Object.keys(data.dependencies)
+    t.deepEqual(keys.length > 0, true, 'keys.length > 0')
+    var key = keys[0]
+    t.deepEqual(typeof data.dependencies[key].version,  'string',  '[key].version')
+    t.deepEqual(typeof data.dependencies[key].range,    'string',  '[key].range')
+    t.deepEqual(typeof data.dependencies[key].outdated, 'boolean', '[key].outdated')
     t.end()
   })
   .catch(function(err) {
+    console.log(err)
     t.deepEqual(err.code, 'ENOTFOUND', 'error catch ENOTFOUND')
     t.end()
   })
 })
 
-test('dependencies latest true', { timeout:10000 }, function (t) {
-
-  fn('object-funcs', true)
-  .then(function(data) {
-    // console.log(data)
-    t.deepEqual(data.name,                            'object-funcs')
-    t.deepEqual(typeof data.version,                  'string')
-    t.deepEqual(typeof data.dependencies['is-funcs'], 'string')
-    t.deepEqual(data.versions == undefined, true, 'data.versions')
-    t.end()
-  })
-  .catch(function(err) {
-    t.deepEqual(err.code, 'ENOTFOUND', 'error catch ENOTFOUND')
-    t.end()
-  })
-})
-
-test('dependencies unknown package', { timeout:10000 }, function (t) {
+test('dependencies unknown package', { timeout:20000 }, function (t) {
 
   fn('is-unknown-package-name')
   .catch(function(err) {

@@ -1,6 +1,6 @@
 {
   "name": "npm-funcs",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "A very limited subset of npm functions I use every day",
   "repository": "jeromedecoster/npm-funcs",
   "files": [
@@ -12,7 +12,8 @@
     "outdated.js",
     "packages.js",
     "request.js",
-    "versions.js"
+    "versions.js",
+    "version.js"
   ],
   "keywords": [
     "npm",
@@ -37,7 +38,7 @@
   "license": "MIT",
   "scripts": {
     "dev": "chokidar '*.js' 'test/*.js' -c 'npm run test'",
-    "test": "tape test/*.js | tap-spec || true"
+    "test": "tape test/dependents.js | tap-spec || true"
   },
   "devDependencies": {
     "chokidar-cli": "^1.2.0",

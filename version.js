@@ -7,13 +7,12 @@ module.exports = function(name) {
       if (data.name == null) {
         throw new Error('Invalid package name')
       }
+      var version = data['dist-tags'].latest
       var obj = {
-        name:     name,
-        versions: {},
-        count:    Object.keys(data.versions).length
-      }
-      for (var k in data.versions) {
-        obj.versions[k] = data.time[k].substr(0, 10)
+        name:    name,
+        version: version,
+        date:    data.time[version].substr(0, 10),
+        count:   Object.keys(data.versions).length
       }
       resolve(obj)
     })
