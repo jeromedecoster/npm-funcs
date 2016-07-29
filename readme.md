@@ -29,7 +29,7 @@ Get some infos about the dependencies of a npm package
 
 Return a Promise. The resolve function receive a JSON as described below
 
-For each package in the dependencies section, return some properties
+For each package in the dependencies section, returns some properties
 
 | Property | Action |
 | :------ | :------- |
@@ -64,7 +64,7 @@ dependencies('object-funcs')
 
 #### dependents(name)
 
-Get some relational infos on all packages that dependend of a specific npm package
+Get relational infos on all packages that depend of a specific npm package
 
 | Argument | Action |
 | :------ | :------- |
@@ -72,7 +72,7 @@ Get some relational infos on all packages that dependend of a specific npm packa
 
 Return a Promise. The resolve function receive a JSON as described below
 
-For each dependent package, return some properties
+For each dependent package, returns some properties
 
 | Property | Action |
 | :------ | :------- |
@@ -177,7 +177,7 @@ packages('jeromedecoster')
 
 #### versions(name)
 
-Get the versions of a npm package
+Get all the versions of a npm package
 
 | Argument | Action |
 | :------ | :------- |
@@ -225,9 +225,7 @@ const version = require('npm-funcs/version')
 /*
 {
   name: 'is-funcs',
-  version: '0.5.1',
-  date: '2016-07-13'
-  count: 11
+  version: '0.5.1'
 }
 */
 version('is-funcs')

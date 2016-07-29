@@ -5,7 +5,7 @@ test('dependents', { timeout:20000 }, function (t) {
 
   fn('is-funcs')
   .then(function(data) {
-    console.log(data)
+    // console.log(data)
     t.deepEqual(data.name,           'is-funcs')
     t.deepEqual(typeof data.version, 'string')
     t.deepEqual(data.count > 2,      true)

@@ -8,8 +8,7 @@ test('version', { timeout:20000 }, function (t) {
     // console.log(data)
     t.deepEqual(data.name,           'is-funcs')
     t.deepEqual(typeof data.version, 'string')
-    t.deepEqual(typeof data.date,    'string')
-    t.deepEqual(data.count > 5,      true)
+    t.deepEqual(Object.keys(data).length, 2)
     t.end()
   })
   .catch(function(err) {
